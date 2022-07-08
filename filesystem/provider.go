@@ -32,12 +32,9 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	fm := &FileManager{}
 	var diags diag.Diagnostics
 
-	secret_key := d.Get("secret_key").(string)
-	if secret_key != "" {
-		_, err := fm.CreateFile("./secret_key.txt", secret_key)
-		if err != nil {
-			return nil, diag.FromErr(err)
-		}
+	secretKey := d.Get("secret_key").(string)
+	if secretKey != "" {
+		fm.SetSecretKey(secretKey)
 	}
 	return fm, diags
 }

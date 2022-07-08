@@ -15,6 +15,11 @@ type FileInfo struct {
 }
 
 type FileManager struct {
+	secretKey string
+}
+
+func NewFileManager() *FileManager {
+	return &FileManager{}
 }
 
 func (f *FileManager) CreateFile(path string, content string) (*FileInfo, error) {
@@ -27,7 +32,11 @@ func (f *FileManager) CreateFile(path string, content string) (*FileInfo, error)
 	if err != nil {
 		return nil, err
 	}
-	ioutil.WriteFile(path, []byte(content), 0666)
+	data := []byte(content)
+	if f.secretKey != "" {
+		data = xorWithSecretKey(data, f.secretKey)
+	}
+	ioutil.WriteFile(path, data, 0666)
 	return f.ReadFile(path)
 }
 
@@ -36,7 +45,10 @@ func (f *FileManager) ReadFile(path string) (*FileInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-	stream, err := ioutil.ReadFile(path)
+	data, err := ioutil.ReadFile(path)
+	if f.secretKey != "" {
+		data = xorWithSecretKey(data, f.secretKey)
+	}
 	if err != nil {
 		return nil, err
 	}
@@ -45,12 +57,16 @@ func (f *FileManager) ReadFile(path string) (*FileInfo, error) {
 		FilePath:       path,
 		FileSize:       fi.Size(),
 		FileUpdateTime: fi.ModTime().Format("2006-01-02 15:04:05"),
-		FileContent:    string(stream),
+		FileContent:    string(data),
 	}, nil
 }
 
 func (f *FileManager) UpdateFile(path string, content string) (*FileInfo, error) {
-	err := ioutil.WriteFile(path, []byte(content), 0666)
+	data := []byte(content)
+	if f.secretKey != "" {
+		data = xorWithSecretKey(data, f.secretKey)
+	}
+	err := ioutil.WriteFile(path, data, 0666)
 	if err != nil {
 		return nil, err
 	}
@@ -59,6 +75,10 @@ func (f *FileManager) UpdateFile(path string, content string) (*FileInfo, error)
 
 func (f *FileManager) DeleteFile(path string) error {
 	return os.Remove(path)
+}
+
+func (f *FileManager) SetSecretKey(secretKey string) {
+	f.secretKey = secretKey
 }
 
 func isExist(path string) bool {
@@ -70,4 +90,12 @@ func isExist(path string) bool {
 		return false
 	}
 	return true
+}
+
+func xorWithSecretKey(data []byte, key string) []byte {
+	dl, kl := len(data), len(key)
+	for i := 0; i < dl; i++ {
+		data[i] ^= key[i%kl]
+	}
+	return data
 }
