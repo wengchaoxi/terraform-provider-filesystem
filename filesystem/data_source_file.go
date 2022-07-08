@@ -13,24 +13,29 @@ func dataSourceFile() *schema.Resource {
 		ReadContext: dataSourceFileRead,
 		Schema: map[string]*schema.Schema{
 			"path": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The path to save the file.",
 			},
 			"filename": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The name of the file.",
 			},
 			"size": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The size of The file.",
 			},
 			"update_time": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The update time of the file.",
 			},
 			"content": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The content of the file.",
 			},
 		},
 	}
@@ -50,6 +55,6 @@ func dataSourceFileRead(ctx context.Context, d *schema.ResourceData, m interface
 	d.Set("update_time", fi.FileUpdateTime)
 	d.Set("content", fi.FileContent)
 
-	d.SetId(path) 
+	d.SetId(path)
 	return diags
 }

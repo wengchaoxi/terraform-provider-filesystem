@@ -15,13 +15,15 @@ func resourceFile() *schema.Resource {
 		DeleteContext: resourceFileDelete,
 		Schema: map[string]*schema.Schema{
 			"path": {
-				Type:     schema.TypeString,
-				ForceNew: true,
-				Required: true,
+				Type:        schema.TypeString,
+				ForceNew:    true,
+				Required:    true,
+				Description: "The path to save the file.",
 			},
 			"content": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The content of the file.",
 			},
 		},
 		Importer: &schema.ResourceImporter{

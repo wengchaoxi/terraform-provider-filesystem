@@ -15,6 +15,7 @@ func Provider() *schema.Provider {
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("FILESYSTEM_SECRET_KEY", nil),
+				Description: "The secret key will be used to encrypt the file.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
