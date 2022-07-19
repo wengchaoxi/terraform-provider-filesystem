@@ -10,7 +10,7 @@ pipeline {
     }
 
     stages {
-        stage("github release") {
+        stage("github-release") {
             environment {
                 GITHUB_TOKEN = credentials('github-token')
                 GPG_PRIVATE_KEY_FILE = credentials('gpg-private-key-file')
@@ -24,6 +24,12 @@ pipeline {
                         gpgPrivateKeyFile: "$GPG_PRIVATE_KEY_FILE", gpgFingerprint: "$GPG_FINGERPRINT")
                 }
             }
+        }
+    }
+
+    post {
+        failure {
+            sh "git tag -d v${params.PROVIDER_VERSION}"
         }
     }
 }
