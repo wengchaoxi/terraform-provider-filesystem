@@ -1,35 +1,5 @@
 #!/usr/bin/env groovy
 
-def withGo(String version, Closure body) {
-    def goreleaserHome = tool name: "goreleaser-v${version}", type: 'com.cloudbees.jenkins.plugins.customtools.CustomTool'
-    withEnv(["PATH+GORELEASER=${goreleaserHome}"], body)
-}
-
-def terraformProviderRelease(Map params = [:]) {
-    def releaseVersion = params.get('releaseVersion', '')
-    assert releaseVersion
-    def githubToken = params.get('githubToken', '')
-    assert githubToken
-    def gpgPrivateKeyFile = params.get('gpgPrivateKeyFile', '')
-    assert gpgPrivateKeyFile
-    def gpgFingerprint = params.get('gpgFingerprint', '')
-    assert gpgFingerprint
-
-    withGo('1.18.4') {
-        withGoReleaser('1.10.2') {
-            sh """
-                git tag v"${releaseVersion}"
-                err=`gpg --armor --export "${gpgFingerprint}" 1>/dev/null`
-                if [ -n "\$err" ]; then
-                    gpg --import "${gpgPrivateKeyFile}"
-                fi
-                export "GPG_FINGERPRINT=${gpgFingerprint}"
-                goreleaser release --rm-dist
-            """
-        }
-    }
-}
-
 pipeline {
     agent any
 
