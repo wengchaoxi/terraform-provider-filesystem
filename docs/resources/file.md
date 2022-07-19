@@ -9,16 +9,15 @@ resource "filesystem_file" "writer" {
 }
 ```
 
-## Schema
+## Argument Reference
 
-### Required
+The following arguments are supported:
 
-- `path` (String) The path to save the file.
+* `path` - (Required) The path to save the file.
+* `content` - (Optional) The content of the file.
 
-### Optional
+## Attribute Reference
 
-- `content` (String) The content of the file.
+In addition to all arguments above, the following attributes are exported:
 
-### Read-Only
-
-- `id` (String) The ID of this resource.
+* `id` - The ID of this resource.

@@ -1,4 +1,4 @@
-# filesystem Provider
+# Filesystem Provider
 
 This provider is used to manage filesystem.
 
@@ -12,8 +12,6 @@ provider "filesystem" {
 }
 ```
 
-## Schema
+## Argument Reference
 
-### Optional
-
-- `secret_key` (String, Sensitive) The secret key will be used to encrypt the file.
+* `secret_key` - (Optional, Sensitive) The secret key will be used to encrypt the file.

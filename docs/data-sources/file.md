@@ -13,16 +13,18 @@ data "filesystem_file" "reader" {
 }
 ```
 
-## Schema
+## Argument Reference
 
-### Required
+The following arguments are supported:
 
-- `path` (String) The path to save the file.
+* `path` - (Required) The path to save the file.
 
-### Read-Only
+## Attribute Reference
 
-- `content` (String) The content of the file.
-- `filename` (String) The name of the file.
-- `id` (String) The ID of this resource.
-- `size` (String) The size of The file.
-- `update_time` (String) The update time of the file.
+In addition to all arguments above, the following attributes are exported:
+
+* `content` - The content of the file.
+* `filename` - The name of the file.
+* `id` - The ID of this resource.
+* `size` - The size of The file.
+* `update_time` - The update time of the file.
